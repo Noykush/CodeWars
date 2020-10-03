@@ -3,56 +3,43 @@ public class RoboScript {
 
     private static final String PATTERN = "<span style=\"color: %s\">%s</span>";
     static StringBuilder resCode = new StringBuilder();
+    private static int index = 0;
 
     public static String highlight(String code) {
-        for (int i = 0; i < code.length(); i++) {
-            char c = code.charAt(i);
+        resCode.delete(0,resCode.length());
+        for ( index = 0; index < code.length(); index++) {
+            char c = code.charAt(index);
             if(Character.isLetter(c))
-                handleLetter(code,i);
+                handleLetter(code);
             else if(Character.isDigit(c))
-                handleDigit(code,i);
+                handleDigit(code);
             else
                 resCode.append(c);
         }
-        //
-
-
-//            if ( i < code.length() -1 && code.charAt(i) == code.charAt(i + 1))
-//                    letterCount++;
-//            else if(i == code.length()-1)
-//                res +=  !digitSequence.isEmpty() ? letterCount == 1 ? String.format(PATTERN, "orange",digitSequence) : String.format(PATTERN, "orange",digitSequence) + String.format(PATTERN, letterToColor(code.charAt(i)), Character.toString(code.charAt(i)).repeat(letterCount)) : Character.isDigit(code.charAt(i)) ?  String.format(PATTERN, "orange", code.charAt(i)) : String.format(PATTERN, letterToColor(code.charAt(i)), Character.toString(code.charAt(i)).repeat(letterCount));
-//            else if (Character.isDigit(code.charAt(i)))
-//                    digitSequence += code.charAt(i);
-//            else {
-//                res += digitSequence.isEmpty() ? String.format(PATTERN, letterToColor(code.charAt(i)), Character.toString(code.charAt(i)).repeat(letterCount)) : String.format(PATTERN, "orange", digitSequence) + String.format(PATTERN, letterToColor(code.charAt(i)), code.charAt(i));
-//                letterCount = 1;
-//                digitSequence = "";
-//            }
-
         return resCode.toString();
     }
 
-    private static void handleLetter(String code, int index){
+    private static void handleLetter(String code){
         char c = code.charAt(index);
         int occurrences = 0;
         for (; index < code.length() && code.charAt(index) == c ;index++){
             occurrences++;
         }
         index--;
-        String format =  String.format(PATTERN, letterToColor(code.charAt(index)),Character.toString(c).repeat(occurrences));
+        String format =  String.format(PATTERN, letterToColor(c),Character.toString(c).repeat(occurrences));
         resCode.append(format);
     }
 
-    private static void handleDigit(String code, int index){
+    private static void handleDigit(String code){
         char c = code.charAt(index);
         String digitSeq = "";
         for(; index < code.length() && Character.isDigit(code.charAt(index)); index++){
             digitSeq += Character.toString(code.charAt(index));
         }
+        index--;
         String format =  String.format(PATTERN, "orange", digitSeq);
         resCode.append(format);
     }
-
 
     private static String letterToColor(char c){
         String color = "";
